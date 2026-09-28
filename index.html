@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculus — A Visual Field Guide</title>
+<meta name="description" content="An interactive visual guide to derivatives, integrals and limits.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Newsreader:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top-nav">
+  <div class="top-nav-inner">
+    <div class="brand"><span class="brand-mark">∫</span><span>CALCULUS</span></div>
+    <nav class="nav-links">
+      <a href="#derivatives">01 · Derivatives</a>
+      <a href="#integrals">02 · Integrals</a>
+      <a href="#limits">03 · Limits</a>
+      <a href="#practice">04 · Practice</a>
+    </nav>
+    <div class="nav-meta">v.MMXXIV · field ed.</div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-meta">§ 00 — A Visual Field Guide</div>
+      <h1 class="hero-title">Calcu<span class="amp">·</span>lus</h1>
+      <p class="hero-subtitle">the architecture of change — rendered in three foundations, one language, and the slope of a single line.</p>
+      <div class="hero-tags">
+        <span class="pill orange"><span class="dot"></span>Derivatives</span>
+        <span class="pill green"><span class="dot"></span>Integrals</span>
+        <span class="pill"><span class="dot"></span>Limits</span>
+      </div>
+
+      <div class="hero-canvas-wrap">
+        <div class="canvas-frame hero-canvas-frame">
+          <div class="canvas-corner tl"></div><div class="canvas-corner tr"></div>
+          <div class="canvas-corner bl"></div><div class="canvas-corner br"></div>
+          <canvas id="hero-canvas"></canvas>
+          <div class="deriv-canvas-label" style="background:transparent;border:none;">
+            <span style="color:var(--ink-soft);">f(x) = sin(x) &nbsp;·&nbsp; f′(x) = cos(x)</span>
+          </div>
+        </div>
+        <div class="hero-readout">
+          <div class="readout-cell"><div class="readout-label">Point x</div><div class="readout-value mono" id="hero-x">+0.000</div></div>
+          <div class="readout-cell"><div class="readout-label">f(x)</div><div class="readout-value mono" id="hero-fx">+0.000</div></div>
+          <div class="readout-cell"><div class="readout-label">slope f′(x)</div><div class="readout-value mono" id="hero-slope">+0.000</div></div>
+          <div class="readout-cell"><div class="readout-label">tangent line</div><div class="readout-value mono" id="hero-eq" style="font-size:14px;">y = 0 + 0·(x − 0)</div></div>
+        </div>
+      </div>
+
+      <div class="hero-paragraph">
+        <p><span class="lead">Three foundations. One language for change.</span></p>
+        <p>The <span class="term" data-def="The derivative of a function at a point is the limit of the ratio of the change in the function to the change in the independent variable as the latter approaches zero.">derivative</span> measures how a quantity changes at a single instant. The <span class="term" data-def="The integral of a function over an interval is the limit of Riemann sums as the partition becomes arbitrarily fine; geometrically, the signed area between the graph and the x-axis.">integral</span> accumulates infinitely many such changes into a finite total. The <span class="term" data-def="A limit describes the value that a function approaches as the input approaches some specified point, even if the function is undefined there.">limit</span> is the rigorous scaffolding on which both are built — every continuous argument in mathematics passes through it.</p>
+      </div>
+
+      <div class="divider-text"><span>Drag any control · hover any underlined term</span></div>
+    </div>
+  </section>
+
+  <section id="derivatives" class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><div class="section-num">§ 01 / DERIVATIVES</div></div>
+        <div><h2 class="section-title">The Slope<br>of an Instant.</h2></div>
+      </div>
+      <p class="section-epigraph" style="margin-top:-32px; margin-bottom:48px;">A tangent line is the best linear approximation to a curve at a point — the line that "kisses" the graph and shares its direction.</p>
+
+      <div class="grid-2">
+        <div class="prose-block">
+          <p>For a function <em>f</em>, the derivative <em>f</em>′(<em>x</em>) at a point is the slope of the <span class="term" data-def="The unique line through a point on a smooth curve that locally approximates the curve to first order.">tangent line</span> there. Formally, it is the limit of the <span class="term" data-def="The ratio (f(x+h) − f(x))/h; the average rate of change of f over the interval [x, x+h].">difference quotient</span> as the step <em>h</em> shrinks to zero:</p>
+          <div class="formula-block" id="eq-derivative-def"></div>
+          <p>Drag the orange point along the curve. Watch the tangent line pivot. Below it, the slope at each <em>x</em> is plotted in orange as <em>f</em>′(<em>x</em>) — the derivative function, born from the original.</p>
+          <p style="font-style:italic; color:var(--ink-soft); font-size:15px;">↳ Try changing the function. Each shape has its own signature rate of change.</p>
+        </div>
+
+        <div>
+          <div class="deriv-toolbar">
+            <div class="fn-selector" id="fn-selector">
+              <button data-fn="sin" class="active">sin(x)</button>
+              <button data-fn="x2">x²</button>
+              <button data-fn="x3">x³</button>
+              <button data-fn="exp">eˣ</button>
+              <button data-fn="log">ln(x)</button>
+            </div>
+          </div>
+
+          <div class="deriv-stack">
+            <div class="canvas-frame" style="height:300px;">
+              <div class="canvas-corner tl"></div><div class="canvas-corner tr"></div>
+              <div class="canvas-corner bl"></div><div class="canvas-corner br"></div>
+              <canvas id="deriv-top"></canvas>
+              <div class="deriv-canvas-label"><span class="swatch" style="background:var(--ink);"></span>f(x)</div>
+            </div>
+            <div class="canvas-frame" style="height:220px;">
+              <div class="canvas-corner tl"></div><div class="canvas-corner tr"></div>
+              <div class="canvas-corner bl"></div><div class="canvas-corner br"></div>
+              <canvas id="deriv-bot"></canvas>
+              <div class="deriv-canvas-label"><span class="swatch" style="background:var(--orange);"></span>f′(x) — derivative</div>
+            </div>
+          </div>
+
+          <div class="integral-stats" style="border-top:none;">
+            <div class="stat"><div class="stat-label">point x</div><div class="stat-value" id="deriv-x-val">+0.00</div></div>
+            <div class="stat"><div class="stat-label">f(x)</div><div class="stat-value" id="deriv-fx-val">+0.00</div></div>
+            <div class="stat"><div class="stat-label">slope f′(x)</div><div class="stat-value orange" id="deriv-dfx-val">+0.00</div></div>
+          </div>
+
+          <div style="margin-top:16px; padding:12px 14px; background:var(--paper-white); border:1px dashed var(--ink-faint); font-size:14px; color:var(--ink-soft);">
+            <strong style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:.14em; color:var(--ink);">Hint:</strong> Click on the top plot and drag — or scroll to zoom · hover the top plot for the slope at that x.
+          </div>
+        </div>
+      </div>
+
+      <div class="proof-block">
+        <div class="proof-head">
+          <span class="pill orange"><span class="dot"></span>Step-through proof</span>
+          <h3>The derivative of sin(x) is cos(x).</h3>
+        </div>
+        <div class="proof-steps" id="proof-container">
+          <div class="proof-step"><div class="step-num">01</div><div class="step-content"><p>Begin with the limit definition.</p><div class="step-eq" id="proof-eq-1"></div></div></div>
+          <div class="proof-step"><div class="step-num">02</div><div class="step-content"><p>Apply the angle-addition identity for sine.</p><div class="step-eq" id="proof-eq-2"></div></div></div>
+          <div class="proof-step"><div class="step-num">03</div><div class="step-content"><p>Split into two fundamental limits.</p><div class="step-eq" id="proof-eq-3"></div></div></div>
+          <div class="proof-step"><div class="step-num">04</div><div class="step-content"><p>Use the classical evaluations: <span class="mono">lim<sub>h→0</sub> sin(h)/h = 1</span> and <span class="mono">lim<sub>h→0</sub> (1 − cos(h))/h = 0</span>.</p><div class="step-eq" id="proof-eq-4"></div></div></div>
+          <div class="proof-step"><div class="step-num">05</div><div class="step-content"><p>Therefore, the derivative of sine is cosine. ∎</p><div class="step-eq" id="proof-eq-5"></div></div></div>
+        </div>
+        <div class="proof-controls">
+          <button class="btn orange" id="proof-next">Next step →</button>
+          <button class="btn" id="proof-reset">Reset</button>
+          <div class="proof-progress"><div class="proof-progress-bar" id="proof-bar" style="width:0%;"></div></div>
+          <span class="mono" style="font-size:12px; color:var(--ink-soft);" id="proof-count">0 / 5</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="integrals" class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><div class="section-num">§ 02 / INTEGRALS</div></div>
+        <div><h2 class="section-title">Accumulation,<br>Rectified.</h2></div>
+      </div>
+      <p class="section-epigraph" style="margin-top:-32px; margin-bottom:48px;">Slice the area beneath a curve into infinitely many infinitesimally thin rectangles — and add them all up.</p>
+
+      <div class="grid-2">
+        <div class="prose-block">
+          <p>The <span class="term" data-def="A Riemann sum is an approximation of an integral formed by summing the areas of rectangles whose heights are determined by the function's value at sample points in each subinterval.">Riemann sum</span> partitions the interval [<em>a</em>, <em>b</em>] into <em>n</em> strips. As <em>n</em> grows, the rectangles hug the curve ever more tightly:</p>
+          <div class="formula-block" id="eq-integral-def"></div>
+          <p>In the limit, the sum converges to the <span class="term" data-def="The definite integral of f from a to b, denoted ∫ₐᵇ f(x) dx, equals the signed area between the graph of f and the x-axis over [a, b].">definite integral</span> — the exact signed area beneath the curve. Drag the partition slider below.</p>
+          <p style="font-style:italic; color:var(--ink-soft); font-size:15px;">↳ Switch between left, right, midpoint, and trapezoidal rules to see how each approximates the true area.</p>
+        </div>
+
+        <div>
+          <div class="integral-canvas-wrap">
+            <div class="canvas-frame integral-canvas-frame">
+              <div class="canvas-corner tl"></div><div class="canvas-corner tr"></div>
+              <div class="canvas-corner bl"></div><div class="canvas-corner br"></div>
+              <canvas id="integral-canvas"></canvas>
+              <div class="deriv-canvas-label"><span class="swatch" style="background:var(--green);"></span>f(x) = 0.4x² + 0.5 · on [0, 6]</div>
+            </div>
+            <div class="integral-controls">
+              <div class="control-group">
+                <div class="control-label"><span>Partitions n</span><span class="control-value" id="integral-n-val">16</span></div>
+                <input type="range" id="integral-n" class="green" min="1" max="80" value="16">
+                <div class="control-label" style="margin-top:8px;"><span>Slice method</span></div>
+                <div class="method-buttons" id="method-buttons">
+                  <button data-method="left">Left</button>
+                  <button data-method="right">Right</button>
+                  <button data-method="mid" class="active">Mid</button>
+                  <button data-method="trap">Trap</button>
+                </div>
+              </div>
+              <div class="control-group">
+                <div style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:.16em; color:var(--ink-soft); margin-bottom:6px;">Exact integral</div>
+                <div style="font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.6;">
+                  ∫₀⁶ f(x) dx<br>= <span style="font-size:22px; color:var(--green); font-weight:500;" id="integral-exact">17.280</span>
+                </div>
+                <div style="margin-top:10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-soft);">via antiderivative F(b) − F(a)</div>
+              </div>
+            </div>
+            <div class="integral-stats">
+              <div class="stat"><div class="stat-label">approximation</div><div class="stat-value green" id="integral-approx">17.2695</div></div>
+              <div class="stat"><div class="stat-label">error</div><div class="stat-value orange" id="integral-error">+0.0105</div></div>
+              <div class="stat"><div class="stat-label">slice width Δx</div><div class="stat-value" id="integral-dx">0.3750</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider-text"><span>Fundamental theorem · derivatives and integrals are inverses</span></div>
+      <div style="max-width:760px; margin:0 auto; text-align:center;">
+        <div id="eq-ftc" style="font-size:24px;"></div>
+        <p style="font-style:italic; color:var(--ink-soft); margin-top:16px;">Differentiation undoes integration, and integration undoes differentiation — the central discovery of calculus, binding the two halves into a single theory.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="limits" class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><div class="section-num">§ 03 / LIMITS</div></div>
+        <div><h2 class="section-title">The ε–δ<br>Contract.</h2></div>
+      </div>
+      <p class="section-epigraph" style="margin-top:-32px; margin-bottom:48px;">A limit is a promise: for every tolerance you demand, there is a neighborhood that delivers.</p>
+
+      <div class="limits-layout">
+        <div>
+          <div class="canvas-frame limits-canvas-frame">
+            <div class="canvas-corner tl"></div><div class="canvas-corner tr"></div>
+            <div class="canvas-corner bl"></div><div class="canvas-corner br"></div>
+            <canvas id="limits-canvas"></canvas>
+            <div class="deriv-canvas-label"><span class="swatch" style="background:var(--ink);"></span>f(x) = x² · lim<sub>x→2</sub> f(x) = 4</div>
+          </div>
+          <div style="margin-top:16px; padding:12px 14px; background:var(--paper-white); border:1px dashed var(--ink-faint); font-size:14px; color:var(--ink-soft);">
+            <strong style="font-family:'Space Grotesk',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:.14em; color:var(--ink);">Drag ε</strong> — the green horizontal band sets the target y-tolerance. δ (orange vertical band) snaps to the maximum width that keeps the curve inside ε.
+          </div>
+        </div>
+
+        <div class="limits-panel">
+          <div class="limits-readout">
+            <h4>The formal definition</h4>
+            <div style="text-align:center; padding:12px 0;" id="eq-edelta"></div>
+            <div style="border-top:1px dashed var(--ink-faint); padding-top:14px; margin-top:8px;">
+              <div class="eq-line"><span>ε <span style="color:var(--ink-soft);">(y-tolerance)</span></span><span class="val green" id="eps-val">0.400</span></div>
+              <div class="eq-line"><span>δ <span style="color:var(--ink-soft);">(x-neighborhood)</span></span><span class="val orange" id="delta-val">0.0975</span></div>
+              <div class="eq-line"><span>limit L</span><span class="val">4.000</span></div>
+            </div>
+            <div class="delta-status" id="delta-status">
+              For all x with |x − 2| &lt; <strong id="status-delta">0.0975</strong>, we have |x² − 4| &lt; <strong id="status-eps">0.400</strong>.
+            </div>
+          </div>
+
+          <div class="limits-panel">
+            <div class="control-group">
+              <div class="control-label"><span>ε — y-tolerance</span><span class="control-value" id="eps-display">0.400</span></div>
+              <input type="range" id="eps-slider" class="green" min="0.1" max="1.5" step="0.01" value="0.4">
+            </div>
+            <div class="control-group">
+              <div class="control-label"><span>δ — x-neighborhood (auto)</span><span class="control-value" id="delta-display">0.0975</span></div>
+              <input type="range" id="delta-slider" class="orange" min="0.01" max="0.5" step="0.001" value="0.0975" disabled>
+            </div>
+            <div style="font-size:13px; color:var(--ink-soft); font-style:italic; line-height:1.5;">
+              The maximal δ for f(x) = x² near x = 2 is δ = min(2 − √(4−ε), √(4+ε) − 2). Watch it snap when you change ε.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="practice" class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><div class="section-num">§ 04 / PRACTICE</div></div>
+        <div><h2 class="section-title">Worked<br>Examples.</h2></div>
+      </div>
+      <p class="section-epigraph" style="margin-top:-32px; margin-bottom:48px;">Four applied problems, each with progressive hints. Reveal one step at a time — only when you're ready.</p>
+
+      <div class="practice-grid">
+        <div class="problem-card">
+          <div class="problem-tag deriv"><span class="dot"></span>Related rates · differentiation</div>
+          <h3 class="problem-title">A ladder slides down a wall.</h3>
+          <div class="problem-body">A 10 ft ladder leans against a vertical wall. The bottom is pulled away at <span class="mono">2 ft/s</span>. When the bottom is <span class="mono">6 ft</span> from the wall, how fast is the top sliding <em>down</em>?</div>
+          <div class="problem-hints">
+            <div class="hint-row"><span class="hint-label">HINT 01</span>Let <em>x</em> be the bottom distance, <em>y</em> the height. Pythagoras: <span class="mono">x² + y² = 100</span>.</div>
+            <div class="hint-row"><span class="hint-label">HINT 02</span>Differentiate implicitly with respect to time <em>t</em>.</div>
+            <div class="hint-row"><span class="hint-label">HINT 03</span>At <em>x</em> = 6: <em>y</em> = √(100 − 36) = 8. Plug in.</div>
+            <div class="hint-row"><span class="hint-label">SOLVE</span>2x·dx/dt + 2y·dy/dt = 0 ⟹ dy/dt = −(x/y)·dx/dt = −(6/8)(2) = −1.5 ft/s.</div>
+          </div>
+          <div class="problem-actions">
+            <button class="btn orange hint-btn" data-target="0">Reveal hint</button>
+            <button class="btn answer-btn" data-target="0">Show answer</button>
+          </div>
+          <div class="problem-answer">The top slides down at 1.5 ft/s.</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-tag integ"><span class="dot"></span>Optimization</div>
+          <h3 class="problem-title">Minimize the surface area of a can.</h3>
+          <div class="problem-body">Design a cylindrical can to hold <span class="mono">355 mL</span> (≈ 355 cm³) of liquid. What radius minimizes the total surface area (top, bottom, side)?</div>
+          <div class="problem-hints">
+            <div class="hint-row"><span class="hint-label">HINT 01</span>Volume <em>V</em> = πr²h = 355. Surface <em>S</em> = 2πr² + 2πrh.</div>
+            <div class="hint-row"><span class="hint-label">HINT 02</span>Eliminate <em>h</em>: <em>h</em> = 355 / (πr²). Substitute into <em>S</em>.</div>
+            <div class="hint-row"><span class="hint-label">HINT 03</span>Set <em>dS/dr</em> = 0 to find the critical point.</div>
+            <div class="hint-row"><span class="hint-label">SOLVE</span>dS/dr = 4πr − 710/r² = 0 ⟹ r³ = 710/(4π) ≈ 56.5 ⟹ r ≈ 3.84 cm, h ≈ 7.67 cm.</div>
+          </div>
+          <div class="problem-actions">
+            <button class="btn green hint-btn" data-target="1">Reveal hint</button>
+            <button class="btn answer-btn" data-target="1">Show answer</button>
+          </div>
+          <div class="problem-answer">r ≈ 3.84 cm, h ≈ 7.67 cm (height = diameter)</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-tag lim"><span class="dot"></span>Limits · L'Hôpital</div>
+          <h3 class="problem-title">The indeterminate 0/0.</h3>
+          <div class="problem-body">Evaluate <span class="mono">lim<sub>x→0</sub> (eˣ − 1 − x) / x²</span>. Direct substitution gives 0/0.</div>
+          <div class="problem-hints">
+            <div class="hint-row"><span class="hint-label">HINT 01</span>Apply L'Hôpital's rule: differentiate numerator and denominator separately.</div>
+            <div class="hint-row"><span class="hint-label">HINT 02</span>Numerator' = eˣ − 1, denominator' = 2x. Still 0/0 at <em>x</em> = 0.</div>
+            <div class="hint-row"><span class="hint-label">HINT 03</span>Apply L'Hôpital a second time.</div>
+            <div class="hint-row"><span class="hint-label">SOLVE</span>(eˣ − 1 − x)″ = eˣ, (x²)″ = 2. Limit = e⁰/2 = 1/2.</div>
+          </div>
+          <div class="problem-actions">
+            <button class="btn hint-btn" data-target="2">Reveal hint</button>
+            <button class="btn answer-btn" data-target="2">Show answer</button>
+          </div>
+          <div class="problem-answer">The limit equals 1/2.</div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-tag integ"><span class="dot"></span>Area between curves</div>
+          <h3 class="problem-title">Enclosed region between parabolas.</h3>
+          <div class="problem-body">Find the area enclosed between <span class="mono">y = x²</span> and <span class="mono">y = 2x − x²</span>.</div>
+          <div class="problem-hints">
+            <div class="hint-row"><span class="hint-label">HINT 01</span>Find intersection points: <em>x</em>² = 2<em>x</em> − <em>x</em>² ⟹ 2<em>x</em>² − 2<em>x</em> = 0.</div>
+            <div class="hint-row"><span class="hint-label">HINT 02</span>Intersections at <em>x</em> = 0 and <em>x</em> = 1. On (0,1), 2x − x² &gt; x².</div>
+            <div class="hint-row"><span class="hint-label">HINT 03</span>Integrate the difference: ∫₀¹ (2x − 2x²) dx.</div>
+            <div class="hint-row"><span class="hint-label">SOLVE</span>[x² − (2/3)x³]₀¹ = 1 − 2/3 = 1/3.</div>
+          </div>
+          <div class="problem-actions">
+            <button class="btn green hint-btn" data-target="3">Reveal hint</button>
+            <button class="btn answer-btn" data-target="3">Show answer</button>
+          </div>
+          <div class="problem-answer">The enclosed area is 1/3 square unit.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div>
+      <div class="footer-brand">∫ Calculus</div>
+      <p class="footer-tag">A visual field guide to the architecture of change — drawn from limit, slope, and signed area.</p>
+    </div>
+    <div><h5>Foundations</h5><ul>
+      <li><a href="#derivatives">Derivatives</a></li><li><a href="#integrals">Integrals</a></li>
+      <li><a href="#limits">Limits</a></li><li><a href="#practice">Practice</a></li></ul></div>
+    <div><h5>Theorems</h5><ul>
+      <li>Mean Value</li><li>Fundamental</li><li>Intermediate Value</li><li>L'Hôpital's</li></ul></div>
+    <div><h5>Edition</h5><ul>
+      <li>Volume I · 2024</li><li>Field edition</li><li>Renders: KaTeX</li><li>Plots: Canvas 2D</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© MMXXIV · Typeset in Space Grotesk &amp; Newsreader</span>
+    <span>Built with HTML, CSS &amp; vanilla JS</span>
+  </div>
+</footer>
+
+<div class="popover" id="popover"></div>
+
+<script src="js/main.js"></script>
+</body>
+</html>
